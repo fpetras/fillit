@@ -13,10 +13,10 @@
 #ifndef FILLIT_H
 # define FILLIT_H
 
-# include <unistd.h>
-# include <string.h>
-# include <stdlib.h>
 # include <fcntl.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 int			reader(char *filename);
 int			checker(const char *piece);
