@@ -93,7 +93,7 @@ static int	valid(char *pieces, char *buffer, size_t buffer_length)
 		buffer += 16 + 5;
 		i++;
 	}
-	return (1);
+	return (n);
 }
 
 int			reader(char *filename)
@@ -116,7 +116,7 @@ int			reader(char *filename)
 			break ;
 		buffer_length += r;
 	}
-	if (!valid(pieces, buffer, buffer_length))
+	if (!(r = valid(pieces, buffer, buffer_length)))
 		return (print_error());
-	return (42);
+	return (solver(pieces, r));
 }
