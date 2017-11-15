@@ -29,10 +29,10 @@ static int	p_cpy(char *dst, char *src, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		dst[4 * i + 0] = src[4 * i + 0];
-		dst[4 * i + 1] = src[4 * i + 1];
-		dst[4 * i + 2] = src[4 * i + 2];
-		dst[4 * i + 3] = src[4 * i + 3];
+		dst[i + 0] = src[i + 0];
+		dst[i + 4] = src[i + 4];
+		dst[i + 8] = src[i + 8];
+		dst[i + 12] = src[i + 12];
 		i++;
 	}
 	return (42);
