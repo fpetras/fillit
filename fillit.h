@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fillit.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpetras <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/15 10:40:33 by fpetras           #+#    #+#             */
+/*   Updated: 2017/11/15 10:41:15 by fpetras          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FILLIT_H
 # define FILLIT_H
 
-# include <fcntl.h>
-# include <string.h>
 # include <unistd.h>
+# include <string.h>
+# include <stdlib.h>
+# include <fcntl.h>
 
 int			reader(char *filename);
 int			checker(const char *piece);
