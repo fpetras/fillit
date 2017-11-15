@@ -18,6 +18,55 @@ static int	print_error(void)
 	return (42);
 }
 
+/*
+** Piece vertical copy (to left)
+*/
+
+static int	p_cpy(char *dst, char *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		dst[4 * i + 0] = src[4 * i + 0];
+		dst[4 * i + 1] = src[4 * i + 1];
+		dst[4 * i + 2] = src[4 * i + 2];
+		dst[4 * i + 3] = src[4 * i + 3];
+		i++;
+	}
+	return (42);
+}
+
+static char	*piece_corner(char *p)
+{
+	if (p[0] == '.' && p[1] == '.' && p[2] == '.' && p[3] == '.')
+	{
+		if (p[4] == '.' && p[5] == '.' && p[6] == '.' && p[7] == '.')
+		{
+			if (p[8] == '.' && p[9] == '.' && p[10] == '.' && p[11] == '.')
+				ft_memcpy(p, p + 12, 4) && ft_memcpy(p + 4, "............", 12);
+			else
+				ft_memcpy(p, p + 8, 8) && ft_memcpy(p + 8, "........", 8);
+		}
+		else
+			ft_memcpy(p, p + 4, 12) && ft_memcpy(p + 12, "....", 4);
+	}
+	if (p[0] == '.' && p[4] == '.' && p[8] == '.' && p[12] == '.')
+	{
+		if (p[1] == '.' && p[5] == '.' && p[9] == '.' && p[13] == '.')
+		{
+			if (p[2] == '.' && p[6] == '.' && p[10] == '.' && p[14] == '.')
+				p_cpy(p, p + 3, 1) && p_cpy(p + 1, "...............", 3);
+			else
+				p_cpy(p, p + 2, 2) && p_cpy(p + 2, "..............", 2);
+		}
+		else
+			p_cpy(p, p + 1, 3) && p_cpy(p + 3, ".............", 1);
+	}
+	return (p);
+}
+
 static int	valid(char *pieces, char *buffer, size_t buffer_length)
 {
 	size_t	i;
@@ -38,7 +87,7 @@ static int	valid(char *pieces, char *buffer, size_t buffer_length)
 		ft_memcpy(pieces + 4, buffer + 5, 4);
 		ft_memcpy(pieces + 8, buffer + 10, 4);
 		ft_memcpy(pieces + 12, buffer + 15, 4);
-		if (!checker(pieces))
+		if (!checker(piece_corner(pieces)))
 			return (0);
 		pieces += 16;
 		buffer += 16 + 5;
