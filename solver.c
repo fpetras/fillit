@@ -27,11 +27,44 @@ static int	letter_not_used(const char *letter_list, const char letter,
 	return (1);
 }
 
+static void	empty_square(char *square, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+		square[i++] = '.';
+}
+
+static int	place(struct s_solver_ctx *ctx, char letter)
+{
+	size_t	piece_id;
+
+	(void)ctx;
+	piece_id = letter - 'A';
+	return (42);
+}
+
 static int	comb_solv(struct s_solver_ctx *ctx)
 {
-	write(1, ctx->letter_list, ctx->letter_id);
-	write(1, "\n", 1);
-	return (42);
+	size_t	i;
+
+	empty_square(ctx->square, ctx->square_side * ctx->square_side);
+	i = 0;
+	while (i < ctx->letter_id)
+	{
+		if (!place(ctx, ctx->letter_list[i]))
+			return (0);
+		i++;
+	}
+	i = 0;
+	while (i < ctx->square_side)
+	{
+		write(1, ctx->square, ctx->square_side);
+		write(1, "\n", 1);
+		i++;
+	}
+	return (1);
 }
 
 static int	letter_comb(struct s_solver_ctx *ctx)
@@ -47,7 +80,8 @@ static int	letter_comb(struct s_solver_ctx *ctx)
 		{
 			ctx->letter_list[ctx->letter_id] = 'A' + i;
 			ctx->letter_id++;
-			letter_comb(ctx);
+			if (letter_comb(ctx))
+				return (1);
 			ctx->letter_id--;
 		}
 		i++;
@@ -62,7 +96,7 @@ int			solver(char *pieces, size_t n)
 	ctx.pieces = pieces;
 	ctx.pieces_length = n;
 	ctx.letter_id = 0;
-	ctx.square_length = 2;
+	ctx.square_side = 2; // TODO loop
 	letter_comb(&ctx);
 	return (42);
 }

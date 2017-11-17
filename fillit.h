@@ -29,7 +29,7 @@ struct				s_solver_ctx
 	char			letter_list[26];
 	size_t			letter_id;
 	char			square[4 * 26 * 4 * 26];
-	size_t			square_length;
+	size_t			square_side;
 };
 
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
