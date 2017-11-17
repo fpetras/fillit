@@ -20,7 +20,17 @@
 
 int					reader(char *filename);
 int					checker(const char *piece);
-int					solver(const char *pieces, size_t n);
+int					solver(char *pieces, size_t n);
+
+struct				s_solver_ctx
+{
+	char			*pieces;
+	size_t			pieces_length;
+	char			letter_list[26];
+	size_t			letter_id;
+	char			square[4 * 26 * 4 * 26];
+	size_t			square_length;
+};
 
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				*ft_memcpy(void *dst, const void *src, size_t n);

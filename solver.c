@@ -27,40 +27,42 @@ static int	letter_not_used(const char *letter_list, const char letter,
 	return (1);
 }
 
-static int	letter_comb(const char *pieces, const size_t n, const size_t id,
-		char *letter_list)
+static int	comb_solv(struct s_solver_ctx *ctx)
+{
+	write(1, ctx->letter_list, ctx->letter_id);
+	write(1, "\n", 1);
+	return (42);
+}
+
+static int	letter_comb(struct s_solver_ctx *ctx)
 {
 	size_t	i;
 
-	(void)pieces;
-	if (id == n)
-	{
-		write(1, letter_list, id);
-		write(1, "\n", 1);
-		return (1);
-	}
+	if (ctx->letter_id == ctx->pieces_length)
+		return (comb_solv(ctx));
 	i = 0;
-	while (i < n)
+	while (i < ctx->pieces_length)
 	{
-		if (letter_not_used(letter_list, 'A' + i, id))
+		if (letter_not_used(ctx->letter_list, 'A' + i, ctx->letter_id))
 		{
-			letter_list[id] = 'A' + i;
-			letter_comb(pieces, n, id + 1, letter_list);
+			ctx->letter_list[ctx->letter_id] = 'A' + i;
+			ctx->letter_id++;
+			letter_comb(ctx);
+			ctx->letter_id--;
 		}
 		i++;
 	}
 	return (0);
 }
 
-int			solver(const char *pieces, const size_t n)
+int			solver(char *pieces, size_t n)
 {
-	size_t	square_length;
-	char	square[4 * 26 * 4 * 26];
-	char	foo[26];
+	struct s_solver_ctx	ctx;
 
-	square_length = 2;
-	(void)square;
-	(void)pieces;
-	letter_comb(pieces, n, 0, foo);
+	ctx.pieces = pieces;
+	ctx.pieces_length = n;
+	ctx.letter_id = 0;
+	ctx.square_length = 2;
+	letter_comb(&ctx);
 	return (42);
 }
