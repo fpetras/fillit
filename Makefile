@@ -1,5 +1,18 @@
-CFLAGS ?= -Wall -Wextra -Werror
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fpetras <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2017/11/18 08:40:30 by fpetras           #+#    #+#              #
+#    Updated: 2017/11/18 09:54:09 by fpetras          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME ?= fillit
+
+CFLAGS ?= -Wall -Wextra -Werror
 
 SRC := \
 	checker.c \
@@ -9,9 +22,11 @@ SRC := \
 	ft_strlen.c \
 	main.c \
 	reader.c \
-	solver.c
+	solver.c \
+	placer.c
 
 OBJ := $(SRC:.c=.o)
+
 CFLAGS += -MMD -MP
 
 all: $(NAME)

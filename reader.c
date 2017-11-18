@@ -6,7 +6,7 @@
 /*   By: emartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 19:05:37 by emartine          #+#    #+#             */
-/*   Updated: 2017/11/14 19:05:39 by emartine         ###   ########.fr       */
+/*   Updated: 2017/11/18 11:05:03 by fpetras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	print_error(void)
 }
 
 /*
-** Piece vertical copy (to left)
+** Piece copy (to top left corner)
 */
 
 static int	p_cpy(char *dst, char *src, size_t n)
@@ -38,7 +38,7 @@ static int	p_cpy(char *dst, char *src, size_t n)
 	return (42);
 }
 
-static char	*piece_corner(char *p)
+static char	*piece_to_corner(char *p)
 {
 	if (p[0] == '.' && p[1] == '.' && p[2] == '.' && p[3] == '.')
 	{
@@ -67,7 +67,7 @@ static char	*piece_corner(char *p)
 	return (p);
 }
 
-static int	valid(char *pieces, char *buffer, size_t buffer_length)
+static int	validate_and_copy(char *pieces, char *buffer, size_t buffer_length)
 {
 	size_t	i;
 	size_t	n;
@@ -87,7 +87,7 @@ static int	valid(char *pieces, char *buffer, size_t buffer_length)
 		ft_memcpy(pieces + 4, buffer + 5, 4);
 		ft_memcpy(pieces + 8, buffer + 10, 4);
 		ft_memcpy(pieces + 12, buffer + 15, 4);
-		if (!checker(piece_corner(pieces)))
+		if (!checker(piece_to_corner(pieces)))
 			return (0);
 		pieces += 16;
 		buffer += 16 + 5;
@@ -99,8 +99,8 @@ static int	valid(char *pieces, char *buffer, size_t buffer_length)
 int			reader(char *filename)
 {
 	int		fd;
+	int		ret;
 	size_t	buffer_length;
-	int		r;
 	char	pieces[416];
 	char	buffer[546];
 
@@ -109,14 +109,14 @@ int			reader(char *filename)
 	buffer_length = 0;
 	while (1)
 	{
-		r = read(fd, buffer + buffer_length, 546 - buffer_length);
-		if (r == -1)
+		ret = read(fd, buffer + buffer_length, 546 - buffer_length);
+		if (ret == -1)
 			return (print_error());
-		if (r == 0)
+		if (ret == 0)
 			break ;
-		buffer_length += r;
+		buffer_length += ret;
 	}
-	if (!(r = valid(pieces, buffer, buffer_length)))
+	if (!(ret = validate_and_copy(pieces, buffer, buffer_length)))
 		return (print_error());
-	return (solver(pieces, r));
+	return (solver(pieces, ret));
 }
