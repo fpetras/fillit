@@ -6,94 +6,112 @@
 /*   By: emartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 19:05:42 by emartine          #+#    #+#             */
-/*   Updated: 2017/11/18 10:24:32 by fpetras          ###   ########.fr       */
+/*   Updated: 2017/11/20 19:52:20 by fpetras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static void	empty_square(char *square, size_t n)
+void	the_federation(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 {
-	size_t	i;
+	int i;
+	int piece_start;
 
+	piece_start = piece_id * 16;
 	i = 0;
-	while (i < n)
-		square[i++] = '.';
-}
-
-static int	comb_solv(t_solver_ctx *ctx)
-{
-	size_t	i;
-
-	empty_square(ctx->square, ctx->square_side * ctx->square_side);
-	i = 0;
-	while (i < ctx->letter_id)
+	while (i < 16)
 	{
-		if (!place(ctx, ctx->letter_list[i]))
-			return (0);
+		if (ctx->pieces[piece_start + i] == '#')
+			ctx->square[square_pos + i / 4 * ctx->square_side + i % 4] = 'A'
+			+ piece_id;
 		i++;
 	}
-	i = 0;
-	while (i < ctx->square_side)
-	{
-		write(1, ctx->square + i * ctx->square_side, ctx->square_side);
-		write(1, "\n", 1);
-		i++;
-	}
-	return (1);
 }
 
-static int	letter_not_used(const char *letter_list, const char letter,
-		const size_t id)
+void	the_alliance(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 {
-	size_t	i;
+	size_t piece_start;
+	size_t i;
 
+	piece_start = piece_id * 16;
 	i = 0;
-	while (i < id)
+	while (i < 16)
 	{
-		if (letter_list[i] == letter)
-			return (0);
+		if (ctx->pieces[piece_start + i] == '#')
+			ctx->square[square_pos + i / 4 * ctx->square_side + i % 4] = '.';
 		i++;
 	}
-	return (1);
 }
 
-static int	letter_comb(t_solver_ctx *ctx)
+int		the_assembly(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 {
-	size_t	i;
+	size_t piece_pos;
 
-	if (ctx->letter_id == ctx->pieces_length)
-		return (comb_solv(ctx));
-	i = 0;
-	while (i < ctx->pieces_length)
+	piece_pos = 0;
+	while (piece_pos < 16)
 	{
-		if (letter_not_used(ctx->letter_list, 'A' + i, ctx->letter_id))
+		if (ctx->pieces[piece_id * 16 + piece_pos] == '#')
 		{
-			ctx->letter_list[ctx->letter_id] = 'A' + i;
-			ctx->letter_id++;
-			if (letter_comb(ctx))
-				return (1);
-			ctx->letter_id--;
+			if (square_pos % ctx->square_side + piece_pos % 4 >=
+				ctx->square_side || square_pos / ctx->square_side +
+				piece_pos / 4 >= ctx->square_side || ctx->square[square_pos +
+				piece_pos / 4 * ctx->square_side + piece_pos % 4] != '.')
+				return (0);
 		}
-		i++;
+		piece_pos++;
+	}
+	the_federation(ctx, piece_id, square_pos);
+	return (1);
+}
+
+int		the_order(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
+{
+	size_t i;
+
+	if (piece_id == ctx->pieces_length)
+	{
+		i = 0;
+		while (i < ctx->square_side)
+		{
+			write(1, ctx->square + i * ctx->square_side, ctx->square_side);
+			write(1, "\n", 1);
+			i++;
+		}
+		return (1);
+	}
+	square_pos = 0;
+	while (square_pos < ctx->square_tiles)
+	{
+		if (the_assembly(ctx, piece_id, square_pos))
+		{
+			if (the_order(ctx, piece_id + 1, 0))
+				return (1);
+			the_alliance(ctx, piece_id, square_pos);
+		}
+		square_pos++;
 	}
 	return (0);
 }
 
-int			solver(char *pieces, size_t n)
+int		solver(char *pieces, size_t n)
 {
-	size_t				i;
-	t_solver_ctx		ctx;
+	size_t			i;
+	size_t			j;
+	t_solver_ctx	ctx;
 
 	ctx.pieces = pieces;
 	ctx.pieces_length = n;
-	ctx.letter_id = 0;
 	i = 2;
 	while (1)
 	{
-		ctx.square_side = i++;
-		if (letter_comb(&ctx))
+		ctx.square_side = i;
+		ctx.square_tiles = i * i;
+		j = 0;
+		while (j < ctx.square_tiles)
+			ctx.square[j++] = '.';
+		if (the_order(&ctx, 0, 0))
 			break ;
+		i++;
 	}
 	return (42);
 }

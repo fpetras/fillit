@@ -6,7 +6,7 @@
 #    By: fpetras <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 08:40:30 by fpetras           #+#    #+#              #
-#    Updated: 2017/11/18 09:54:09 by fpetras          ###   ########.fr        #
+#    Updated: 2017/11/20 19:56:51 by fpetras          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,7 @@ SRC := \
 	ft_strlen.c \
 	main.c \
 	reader.c \
-	solver.c \
-	placer.c
+	solver.c
 
 OBJ := $(SRC:.c=.o)
 
