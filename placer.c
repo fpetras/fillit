@@ -6,7 +6,7 @@
 /*   By: fpetras <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/18 09:29:20 by fpetras           #+#    #+#             */
-/*   Updated: 2017/11/18 10:24:35 by fpetras          ###   ########.fr       */
+/*   Updated: 2017/11/20 08:57:39 by fpetras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,14 @@
 static void	copy_piece(t_solver_ctx *ctx, char letter, size_t square_pos)
 {
 	size_t	i;
-	size_t	tmp;
 	size_t	piece_start;
 
 	i = 0;
-	tmp = 0;
 	piece_start = (letter - 'A') * 16;
 	while (i < 16)
 	{
 		if (ctx->pieces[piece_start + i] == '#')
-		{
-			tmp++;
 			ctx->square[square_pos + i / 4 * ctx->square_side + i % 4] = letter;
-		}
 		i++;
 	}
 }
