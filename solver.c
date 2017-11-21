@@ -6,16 +6,17 @@
 /*   By: emartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 19:05:42 by emartine          #+#    #+#             */
-/*   Updated: 2017/11/20 19:52:20 by fpetras          ###   ########.fr       */
+/*   Updated: 2017/11/14 19:05:44 by emartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-void	the_federation(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
+void		the_federation(struct s_solver_ctx *ctx, int piece_id,
+		int square_pos)
 {
-	int i;
-	int piece_start;
+	int	piece_start;
+	int	i;
 
 	piece_start = piece_id * 16;
 	i = 0;
@@ -23,15 +24,15 @@ void	the_federation(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 	{
 		if (ctx->pieces[piece_start + i] == '#')
 			ctx->square[square_pos + i / 4 * ctx->square_side + i % 4] = 'A'
-			+ piece_id;
+				+ piece_id;
 		i++;
 	}
 }
 
-void	the_alliance(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
+void		the_alliance(struct s_solver_ctx *ctx, int piece_id, int square_pos)
 {
-	size_t piece_start;
-	size_t i;
+	int	piece_start;
+	int	i;
 
 	piece_start = piece_id * 16;
 	i = 0;
@@ -43,9 +44,9 @@ void	the_alliance(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 	}
 }
 
-int		the_assembly(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
+int			the_assembly(struct s_solver_ctx *ctx, int piece_id, int square_pos)
 {
-	size_t piece_pos;
+	int piece_pos;
 
 	piece_pos = 0;
 	while (piece_pos < 16)
@@ -64,9 +65,9 @@ int		the_assembly(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 	return (1);
 }
 
-int		the_order(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
+int			the_order(struct s_solver_ctx *ctx, int piece_id)
 {
-	size_t i;
+	int	i;
 
 	if (piece_id == ctx->pieces_length)
 	{
@@ -79,25 +80,25 @@ int		the_order(t_solver_ctx *ctx, size_t piece_id, size_t square_pos)
 		}
 		return (1);
 	}
-	square_pos = 0;
-	while (square_pos < ctx->square_tiles)
+	i = 0;
+	while (i < ctx->square_tiles)
 	{
-		if (the_assembly(ctx, piece_id, square_pos))
+		if (the_assembly(ctx, piece_id, i))
 		{
-			if (the_order(ctx, piece_id + 1, 0))
+			if (the_order(ctx, piece_id + 1))
 				return (1);
-			the_alliance(ctx, piece_id, square_pos);
+			the_alliance(ctx, piece_id, i);
 		}
-		square_pos++;
+		i++;
 	}
 	return (0);
 }
 
-int		solver(char *pieces, size_t n)
+int			solver(char *pieces, size_t n)
 {
-	size_t			i;
-	size_t			j;
-	t_solver_ctx	ctx;
+	struct s_solver_ctx	ctx;
+	int					i;
+	int					j;
 
 	ctx.pieces = pieces;
 	ctx.pieces_length = n;
@@ -109,7 +110,7 @@ int		solver(char *pieces, size_t n)
 		j = 0;
 		while (j < ctx.square_tiles)
 			ctx.square[j++] = '.';
-		if (the_order(&ctx, 0, 0))
+		if (the_order(&ctx, 0))
 			break ;
 		i++;
 	}

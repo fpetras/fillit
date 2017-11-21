@@ -6,7 +6,7 @@
 /*   By: fpetras <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 10:40:33 by fpetras           #+#    #+#             */
-/*   Updated: 2017/11/20 19:02:53 by fpetras          ###   ########.fr       */
+/*   Updated: 2017/11/15 10:41:15 by fpetras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@
 # include <string.h>
 # include <unistd.h>
 
-typedef struct		s_solver_ctx
-{
-	char			*pieces;
-	size_t			pieces_length;
-	char			square[4 * 26 * 4 * 26];
-	size_t			square_side;
-	size_t			square_tiles;
-}					t_solver_ctx;
-
 int					reader(char *filename);
 int					checker(const char *piece);
 int					solver(char *pieces, size_t n);
+
+struct				s_solver_ctx
+{
+	char			*pieces;
+	int				pieces_length;
+	char			square[4 * 26 * 4 * 26];
+	int				square_side;
+	int				square_tiles;
+};
 
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
